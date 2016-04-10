@@ -14,6 +14,15 @@ CONSTRAINT fk_perfisica_clientes
            references rrhh.personasfisicas(IdPerfisica))
 tablespace ventas_tbs;
 
+create table proveedores(
+IdProveedor     varchar2(30),
+IdPerjuridica   varchar2(30),
+Nombre     varchar2(60),
+CONSTRAINT pk_proveedores PRIMARY KEY (IdProveedor),
+CONSTRAINT fk_perjuridica_proveedores
+           foreign key(IdPerjuridica)
+           references rrhh.personasjuridicas(IdPerjuridica))
+tablespace ventas_tbs;
 
 create table tiposeguro(
 IdSeguro 	varchar2(30),
@@ -32,8 +41,6 @@ Descripcion varchar2(200),
 CONSTRAINT pk_cobertura PRIMARY KEY (IdCobertura))
 tablespace ventas_tbs;
 
-
-
 create table polizas(
 NumPoliza 			varchar2(30),
 IdSeguro 			varchar2(30),
@@ -46,4 +53,16 @@ CONSTRAINT pk_polizas PRIMARY KEY (NumPoliza),
 CONSTRAINT fk_tiposeguro_polizas 
            foreign key(IdSeguro)
            references tiposeguro(IdSeguro))
+tablespace ventas_tbs;
+
+create table posee(
+IdTipoSeguro     varchar2(30),
+IdCobertura   varchar2(30),
+CONSTRAINT pk_posee PRIMARY KEY (IdTipoSeguro,IdCobertura),
+CONSTRAINT fk_tiposeguro_posee 
+           foreign key(IdTipoSeguro)
+           references tiposeguro(IdSeguro),
+ CONSTRAINT fk_cobertura_posee 
+           foreign key(IdCobertura)
+           references cobertura(IdCobertura))
 tablespace ventas_tbs;
