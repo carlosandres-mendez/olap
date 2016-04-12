@@ -3,21 +3,20 @@
 --- Se conecta con el usuario ventas;
 
 create table clientes(
-IdCliente     varchar2(30),
-IdPerfisica   varchar2(30),
-FecNac	      date,
+IdCliente     varchar2(30) NOT NULL,
+IdPersona     varchar2(30) NOT NULL,
 Profesion     varchar2(60),
 Nivel_Aca     varchar2(60),
 CONSTRAINT pk_clientes PRIMARY KEY (IdCliente),
 CONSTRAINT fk_perfisica_clientes 
-           foreign key(IdPerfisica)
-           references rrhh.personasfisicas(IdPerfisica))
+           foreign key(IdPersona)
+           references rrhh.personas(IdPersona))
 tablespace ventas_tbs;
 
 create table proveedores(
-IdProveedor     varchar2(30),
-IdPerjuridica   varchar2(30),
-Nombre     varchar2(60),
+IdProveedor     varchar2(30) NOT NULL,
+IdPerjuridica   varchar2(30) NOT NULL,
+Nombre     		varchar2(60),
 CONSTRAINT pk_proveedores PRIMARY KEY (IdProveedor),
 CONSTRAINT fk_perjuridica_proveedores
            foreign key(IdPerjuridica)
@@ -25,7 +24,7 @@ CONSTRAINT fk_perjuridica_proveedores
 tablespace ventas_tbs;
 
 create table tiposeguro(
-IdSeguro 	varchar2(30),
+IdSeguro 	varchar2(30) NOT NULL,
 Nombre 		varchar2(100),
 Prima 		decimal(10,2),
 Vigencia	date,
@@ -34,7 +33,7 @@ tablespace ventas_tbs;
 
 
 create table cobertura(
-IdCobertura varchar2(30),
+IdCobertura varchar2(30) NOT NULL,
 Nombre		varchar2(100),
 Monto 		decimal(10,2),
 Descripcion varchar2(200),
@@ -42,22 +41,30 @@ CONSTRAINT pk_cobertura PRIMARY KEY (IdCobertura))
 tablespace ventas_tbs;
 
 create table polizas(
-NumPoliza 			varchar2(30),
+NumPoliza 			varchar2(30) NOT NULL,
 IdSeguro 			varchar2(30),
 NombreBeneficiario	varchar2(100),
 PrimaTotal			decimal(10,2),
 Fecha				date,
 MontoAsegurado		decimal(10,2),
 Moneda 				varchar2(30),
+IdVendedor     		varchar2(30),
+IdCliente     		varchar2(30),
 CONSTRAINT pk_polizas PRIMARY KEY (NumPoliza),
 CONSTRAINT fk_tiposeguro_polizas 
            foreign key(IdSeguro)
-           references tiposeguro(IdSeguro))
+           references tiposeguro(IdSeguro),
+CONSTRAINT fk_poliza_vendedor
+			foreign key(IdVendedor)
+			references rrhh.vendedores(IdVendedor),
+CONSTRAINT fk_poliza_cliente
+			foreign key(IdCliente)
+			references clientes(IdCliente))
 tablespace ventas_tbs;
 
 create table posee(
-IdTipoSeguro     varchar2(30),
-IdCobertura   varchar2(30),
+IdTipoSeguro     varchar2(30) NOT NULL,
+IdCobertura   varchar2(30) NOT NULL,
 CONSTRAINT pk_posee PRIMARY KEY (IdTipoSeguro,IdCobertura),
 CONSTRAINT fk_tiposeguro_posee 
            foreign key(IdTipoSeguro)
