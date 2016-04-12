@@ -107,23 +107,6 @@ CONSTRAINT fk_depto_empleado FOREIGN KEY (IdGerente)
 							references empleados(IdEmpleado))
 tablespace rrhh_tbs;
 
-/*
-create table empleados(
-IdEmpleado     varchar2(30),
-IdPerfisica    varchar2(30),
-FecIngreso     date,
-Categoria      varchar2(05),
-IdDepartamento varchar2(30),
-CONSTRAINT pk_empleados PRIMARY KEY (IdEmpleado),
-CONSTRAINT fk_perfisica_empleados 
-           foreign key(IdPerfisica)
-           references personasfisicas(IdPerfisica),
-CONSTRAINT fk_departamentos_empleados 
-           foreign key(IdDepartamento)
-           references departamentos(IdDepartamento))
-tablespace rrhh_tbs;
-*/
-
 create table sedes (
 IdSede    	varchar2(30) NOT NULL,
 Nombre    	varchar2(100),
