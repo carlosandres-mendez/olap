@@ -149,11 +149,12 @@ IdSede  varchar2(30) NOT NULL,
   tablespace rrhh_tbs;
   
  
-CREATE TABLE EvaluacionEmpleado(
+CREATE TABLE evaluacion_emp(
 IdEvaluacion		int NOT NULL
 IdEmpleado 			varchar(30) NOT NULL,
-PromedioTardias 	int NOT NULL,
-PromedioRendimiento int NULL,
+Puntualidad			int,
+Rendimiento			int,
+Proactividad		int,
 Semestre 			varchar(30) NOT NULL),
 Año 				date;
 	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
@@ -162,5 +163,33 @@ Año 				date;
 		 references empleados(IdEmpleado)
     tablespace rrhh_tbs;
   
+CREATE TABLE pagos(
+IdEmpleado 			varchar(30) NOT NULL,
+Mes 				varchar(30) NOT NULL),
+Año 				date,
+monto				int;
+	CONSTRAINT pk_emp_salario PRIMARY KEY (IdEmpleado, Semestre, Año),
+	CONSTRAINT fk_IdEmpleado
+		 foreign key (IdEmpleado)
+		 references empleados(IdEmpleado)
+    tablespace rrhh_tbs;
+ 
+ 
+-- no recuerdo bien si esta tabla era la que por ejemplo decia... 
+-- si un empleado habia faltado muchas veces por incapacidad.. o vendia poco..
+-- Hay que arreglar esta tabla y pasarla al diagrama. 
+CREATE TABLE clima_org(
+IdEvaluacion		int NOT NULL
+IdEmpleado 			varchar(30) NOT NULL,
+Constancia			int,
+Calidad_trabajo		int,
+Dinamismo			int,
+Semestre 			varchar(30) NOT NULL),
+Año 				date;
+	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
+	CONSTRAINT fk_IdEmpleado
+		 foreign key (IdEmpleado)
+		 references empleados(IdEmpleado)
+    tablespace rrhh_tbs;
   
   
