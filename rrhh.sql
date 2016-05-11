@@ -1,6 +1,13 @@
 --- En este esquema: personas, direcciones, departamentos y empleados
 
+--ejecitar desde la conección de parámetro
+
+grant select, update, delete, insert, references on cantones to rrhh
+grant select, update, delete, insert, references on distritos to rrhh;
+grant select, update, delete, insert, references on provincias to rrhh;
+
 --- Se conecta con el usuario rrhh;
+
 
 CREATE TABLE personas
 ( IdPersona varchar2(30) NOT NULL,
@@ -43,16 +50,7 @@ IdSede		varchar2(30),
 CONSTRAINT pf_empleados PRIMARY KEY (IdEmpleado),
 CONSTRAINT fk_empleado_perfisica
            foreign key(IdEmpleado)
-           references personasfisicas(IdPerfisica),
-CONSTRAINT fk_empleado_departamento 
-			foreign key(IdDepartamento)
-			references departamentos(IdDepartamento),
-CONSTRAINT fk_empleado_empleado
-			foreign key(Supervisor)
-			references empleados(IdEmpleado),
-CONSTRAINT fk_empleado_sede
-			foreign key(IdSede)
-			references sedes(IdSede))
+           references personasfisicas(IdPerfisica))
 tablespace rrhh_tbs;
 
 create table telefonos(
@@ -88,6 +86,7 @@ Detalle      varchar2(200),
              references parametros.distritos(idprovincia, idcanton, iddistrito))
   tablespace rrhh_tbs;
 
+
 create table vendedores(
 IdVendedor     	varchar2(30) NOT NULL,
 IdEmpleado     	varchar2(30) NOT NULL,
@@ -96,6 +95,7 @@ CONSTRAINT fk_vendedor_empleado
            foreign key(IdEmpleado)
            references empleados(IdEmpleado))
 tablespace rrhh_tbs;
+
 
 create table departamentos(
 IdDepartamento varchar2(30) NOT NULL,
@@ -106,6 +106,7 @@ CONSTRAINT pk_departamentos PRIMARY KEY (IdDepartamento),
 CONSTRAINT fk_depto_empleado FOREIGN KEY (IdGerente)
 							references empleados(IdEmpleado))
 tablespace rrhh_tbs;
+
 
 create table sedes (
 IdSede    	varchar2(30) NOT NULL,
@@ -121,15 +122,15 @@ Apartado    varchar2(50),
 PagWeb    	varchar2(50),
 Administrador	varchar2(30),
   CONSTRAINT pk_sedes PRIMARY KEY (IdSede),
-  CONSTRAINT fk_dirpersonas_provincias
+  CONSTRAINT fk_dirper_prov_sedes
              foreign key (idprovincia)
              references parametros.provincias(idprovincia),
-  CONSTRAINT fk_dirpersonas_cantones
+  CONSTRAINT fk_dirper_canton_sedes
              foreign key (idprovincia, idcanton)
              references parametros.cantones(idprovincia, idcanton),
-  CONSTRAINT fk_dirpersonas_distritos
+  CONSTRAINT fk_dirper_distritos_sedes
              foreign key (idprovincia, idcanton, iddistrito)
-             references parametros.distritos(idprovincia, idcanton, iddistrito)
+             references parametros.distritos(idprovincia, idcanton, iddistrito),
   CONSTRAINT fk_sede_empleado
   			 foreign key(Administrador)
   			 references empleados(IdEmpleado))
@@ -150,30 +151,43 @@ IdSede  varchar2(30) NOT NULL,
   
  
 CREATE TABLE evaluacion_emp(
-IdEvaluacion		int NOT NULL
+IdEvaluacion		int NOT NULL,
 IdEmpleado 			varchar(30) NOT NULL,
 Puntualidad			int,
 Rendimiento			int,
 Proactividad		int,
-Semestre 			varchar(30) NOT NULL),
-AÃ±o 				date;
+Semestre 			varchar(30) NOT NULL,
+Año 				date,
 	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
 	CONSTRAINT fk_IdEmpleado
 		 foreign key (IdEmpleado)
-		 references empleados(IdEmpleado)
+		 references empleados(IdEmpleado))
     tablespace rrhh_tbs;
+
   
 CREATE TABLE pagos(
 IdEmpleado 			varchar(30) NOT NULL,
-Mes 				varchar(30) NOT NULL),
-AÃ±o 				date,
-monto				int;
-	CONSTRAINT pk_emp_salario PRIMARY KEY (IdEmpleado, Semestre, AÃ±o),
-	CONSTRAINT fk_IdEmpleado
+Mes 				varchar(30) NOT NULL,
+Año 				date,
+monto				int,
+	CONSTRAINT pk_pagos PRIMARY KEY (IdEmpleado, Mes, Año),
+	CONSTRAINT fk_IdEmpleado_pagogos
 		 foreign key (IdEmpleado)
-		 references empleados(IdEmpleado)
+		 references empleados(IdEmpleado));
     tablespace rrhh_tbs;
- 
+
+
+alter table empleados add CONSTRAINT fk_empleado_empleado
+			foreign key(Supervisor)
+			references empleados(IdEmpleado);
+      
+alter table empleados add CONSTRAINT fk_empleado_departamento 
+			foreign key(IdDepartamento)
+			references departamentos(IdDepartamento);
+
+alter table empleados add CONSTRAINT fk_empleado_sede
+			foreign key(IdSede)
+			references sedes(IdSede);
  
 -- no recuerdo bien si esta tabla era la que por ejemplo decia... 
 -- si un empleado habia faltado muchas veces por incapacidad.. o vendia poco..
@@ -185,7 +199,7 @@ Constancia			int,
 Calidad_trabajo		int,
 Dinamismo			int,
 Semestre 			varchar(30) NOT NULL),
-AÃ±o 				date;
+Año 				date;
 	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
 	CONSTRAINT fk_IdEmpleado
 		 foreign key (IdEmpleado)
