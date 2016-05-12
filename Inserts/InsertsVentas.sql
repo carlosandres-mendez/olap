@@ -9,7 +9,7 @@ CREATE SEQUENCE clienteid
   INCREMENT BY 1
   CACHE 20;
 
-CREATE SEQUENCE facturaid
+CREATE SEQUENCE polizaid
   MINVALUE 1
   MAXVALUE 999999999999999999999999999
   START WITH 1
@@ -106,16 +106,43 @@ insert into coberturas values ('G','CKI', 'MULTIASISTENCIA AUTOMÓVILES',350000,
 insert into coberturas values ('G','VDA', 'MULTIASISTENCIA AUTOMÓVILES',200000,'Descripcion');
 
 -- EN PROCESO
-insert into coberturas values ('H','', 'RIESGOS ADICIONALES',100,'Descripcion');
-insert into coberturas values ('I','', 'RCE EXTENDIDA POR LESION Y/O MUERTE DE PERSONAS Y/O DAÑOS A LA PROPIEDAD DE TERCERAS´PERSONAS',100,'Descripcion');
-insert into coberturas values ('J','', 'PÉRDIDAS DE OBJETOS PERSONALES',100,'Descripcion');
-insert into coberturas values ('K','', 'INDEMNIZACIÓN PARA TRANSPORTE ALTERNATIVO',100,'Descripcion');
-insert into coberturas values ('L','', 'RCEE POR LESIÓN Y/O MUERTE DE PERSONAS Y/O DAÑOS A LA PROPIEDAD DE TERCERAS PERSONAS, POR EL USO DE UN  AUTO SUSTITUTO',100,'Descripcion');
-insert into coberturas values ('M','', 'MULTIASISTENCIA EXTENDIDA',100,'Descripcion');
-insert into coberturas values ('N','', 'MULTIASISTENCIA EXTENDIDA',100,'Descripcion');
-insert into coberturas values ('P','', 'SERVICIOS MÉDICOS FAMILIARES PLUS Y MUERTE DE LOS OCUPANTES DEL  VEHÍCULO ASEGURADO',100,'Descripcion');
-insert into coberturas values ('Y','', 'EXTRATERRITORIALIDAD',100,'Descripcion');
-insert into coberturas values ('Z','', 'RIESGOS PARTICULARES',100,'Descripcion');
+insert into coberturas values ('H','ACE', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','ACC', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','VJR', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','MED', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','ROB', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','SAL', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','TSI', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','PRO', 'RIESGOS ADICIONALES',100,'Descripcion');
+
+
+
+insert into coberturas values ('I','DPT', 'RCE EXTENDIDA POR LESION Y/O MUERTE DE PERSONAS Y/O DAÑOS A LA PROPIEDAD DE TERCERAS´PERSONAS',100,'Descripcion');
+
+insert into coberturas values ('J','TSI', 'PÉRDIDAS DE OBJETOS PERSONALES',100,'Descripcion');
+insert into coberturas values ('K','ROB', 'INDEMNIZACIÓN PARA TRANSPORTE ALTERNATIVO',100,'Descripcion');
+
+insert into coberturas values ('L','SOA', 'RCEE POR LESIÓN Y/O MUERTE DE PERSONAS Y/O DAÑOS A LA PROPIEDAD DE TERCERAS PERSONAS, POR EL USO DE UN  AUTO SUSTITUTO',100,'Descripcion');
+insert into coberturas values ('L','VDA', 'RCEE POR LESIÓN Y/O MUERTE DE PERSONAS Y/O DAÑOS A LA PROPIEDAD DE TERCERAS PERSONAS, POR EL USO DE UN  AUTO SUSTITUTO',100,'Descripcion');
+insert into coberturas values ('L','SVI', 'RCEE POR LESIÓN Y/O MUERTE DE PERSONAS Y/O DAÑOS A LA PROPIEDAD DE TERCERAS PERSONAS, POR EL USO DE UN  AUTO SUSTITUTO',100,'Descripcion');
+
+insert into coberturas values ('M','SVI', 'MULTIASISTENCIA EXTENDIDA INDIVIDUAL',100,'Descripcion');
+insert into coberturas values ('M','MED', 'MULTIASISTENCIA EXTENDIDA INDIVIDUAL',100,'Descripcion');
+insert into coberturas values ('M','FID', 'MULTIASISTENCIA EXTENDIDA INDIVIDUAL',100,'Descripcion');
+insert into coberturas values ('M','GFU', 'MULTIASISTENCIA EXTENDIDA INDIVIDUAL',100,'Descripcion');
+
+insert into coberturas values ('N','ASC', 'MULTIASISTENCIA EXTENDIDA COLECTIVA',100,'Descripcion');
+insert into coberturas values ('N','PRO', 'MULTIASISTENCIA EXTENDIDA COLECTIVA',100,'Descripcion');
+insert into coberturas values ('N','GME', 'MULTIASISTENCIA EXTENDIDA COLECTIVA',100,'Descripcion');
+
+insert into coberturas values ('P','HCC', 'SERVICIOS MÉDICOS FAMILIARES PLUS Y MUERTE DE LOS OCUPANTES DEL  VEHÍCULO ASEGURADO',100,'Descripcion');
+
+insert into coberturas values ('Y','DPT', 'EXTRATERRITORIALIDAD',100,'Descripcion');
+
+insert into coberturas values ('Z','RDT', 'RIESGOS PARTICULARES',100,'Descripcion');
+insert into coberturas values ('Z','ACC', 'RIESGOS PARTICULARES',100,'Descripcion');
+insert into coberturas values ('Z','RDT', 'RIESGOS PARTICULARES',100,'Descripcion');
+
 
 
 -- cursor insercion polizas  
@@ -123,46 +150,46 @@ insert into coberturas values ('Z','', 'RIESGOS PARTICULARES',100,'Descripcion')
 -- POR HACER
 -- podemos ayudarnos con este cursor que hizo el profe 
 
-truncate table factura;
+truncate table polizas;
 
 DECLARE
    CURSOR c1 is
       SELECT idcliente, idpersona FROM clientes where rownum < 2001;
    CURSOR c2 is
-      select idproducto, descproducto, unidadmedida, preciounidad
+      select IdSeguro, Prima, IdCobertura, Monto, Vigencia
       from (
-            select idproducto, descproducto, unidadmedida, preciounidad
+            select IdCobertura, IdSeguro, Monto
             from   coberturas
             order by dbms_random.value) r1
       where rownum = 1 or
-            rownum = trunc(dbms_random.value(1,6));
+            rownum = trunc(dbms_random.value(1,4)); -- cantidad de seguros por cliente  
    vcont          integer;
    vcont2         integer;
    vidcliente     varchar2(30);
    vidpersona     varchar2(30);
-   vcantfacturas  integer;
-   vidfactura     varchar2(30);
+   vcantpolizas  integer;
+   vNumPoliza     varchar2(30);
    vfecha         date;
    vcantcoberturas integer;
-   vcontlinea     integer;
+   vcontseguros     integer;
    vcontador      integer;
 BEGIN
    dbms_output.put_line ('fecha inicio '||to_char(sysdate,'dd-mm-yyyy:hh:mi:ss'));
    VCONT := 0;
-   vcantfacturas := 0;
+   vcantpolizas := 0;
    FOR i IN c1 LOOP
       vcont := vcont + 1;
       vidpersona := i.idpersona;
       vidcliente := i.idcliente;
       --DBMS_OUTPUT.put_line('idcliente es:'||vidcliente || ' ' || vidpersona);
-      vcantfacturas := 0;
+      vcantpolizas := 0;
       vcont2        := 0;
       select trunc(dbms_random.value(1,10)) 
-      into   vcantfacturas 
+      into   vcantpolizas
       from   dual;
       loop
           vcont2 := vcont2 + 1;
-          select to_char(facturaid.nextval) into vidfactura from dual;
+          select to_char(NumPoliza.nextval) into vNumPoliza from dual;
           select fecha
           into   vfecha
           from ( select fecha
@@ -170,7 +197,7 @@ BEGIN
                  where  fecha between to_date('01012010','ddmmyyyy') and to_date ('31122015','ddmmyyyy')
                  order by dbms_random.value)
           where rownum  = 1;
-          insert into factura values (vidfactura, vidcliente, null, null,null, vfecha);
+          insert into polizas values (vNumPoliza, vidcliente, null, null,null, vfecha);
           vcontlinea := 0;
           for j in c2 loop
               vcontlinea := vcontlinea + 1;

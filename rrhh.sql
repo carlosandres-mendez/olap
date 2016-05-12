@@ -157,7 +157,11 @@ Puntualidad			int,
 Rendimiento			int,
 Proactividad		int,
 Semestre 			varchar(30) NOT NULL,
+<<<<<<< HEAD
 Año 				date,
+=======
+AÃ±o 				date;
+>>>>>>> origin/master
 	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
 	CONSTRAINT fk_IdEmpleado
 		 foreign key (IdEmpleado)
@@ -167,6 +171,7 @@ Año 				date,
   
 CREATE TABLE pagos(
 IdEmpleado 			varchar(30) NOT NULL,
+<<<<<<< HEAD
 Mes 				varchar(30) NOT NULL,
 Año 				date,
 monto				int,
@@ -174,6 +179,15 @@ monto				int,
 	CONSTRAINT fk_IdEmpleado_pagogos
 		 foreign key (IdEmpleado)
 		 references empleados(IdEmpleado));
+=======
+Semestre 				varchar(30) NOT NULL,
+AÃ±o 				date,
+monto				int;
+	CONSTRAINT pk_emp_salario PRIMARY KEY (IdEmpleado, Semestre, AÃ±o),
+	CONSTRAINT fk_IdEmpleado
+		 foreign key (IdEmpleado)
+		 references empleados(IdEmpleado))
+>>>>>>> origin/master
     tablespace rrhh_tbs;
 
 
@@ -198,12 +212,17 @@ IdEmpleado 			varchar(30) NOT NULL,
 Constancia			int,
 Calidad_trabajo		int,
 Dinamismo			int,
+<<<<<<< HEAD
 Semestre 			varchar(30) NOT NULL),
 Año 				date;
+=======
+Semestre 			varchar(30) NOT NULL,
+AÃ±o 				date;
+>>>>>>> origin/master
 	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
 	CONSTRAINT fk_IdEmpleado
 		 foreign key (IdEmpleado)
-		 references empleados(IdEmpleado)
+		 references empleados(IdEmpleado))
     tablespace rrhh_tbs;
   
   

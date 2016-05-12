@@ -36,5 +36,36 @@ BEGIN
    dbms_output.put_line('la cantidad de personas fisicas es ' || vcant);
 END;
 
+-----------Insert de Telefonos
+
+Create or Replace procedure LlenarTelefonos
+is
+  CURSOR c1 is
+      SELECT idpersona
+      FROM personas;  
+      
+   vIdPersona varchar2(30);
+   vTipoTelefono  varchar2(50);
+   vTelefonoFijo varchar2(13);
+   vTelefonoMovil varchar2(13);
+   
+BEGIN
+   for i in c1 loop
+      vIdPersona :=i.idpersona;
+      
+      select trunc(dbms_random.value(20000000,29999999))
+      into vTelefonoFijo
+      from dual;
+      
+      select trunc(dbms_random.value(60000000,99999999))
+      into vTelefonoMovil
+      from dual;
+      
+       insert into Telefonos values(vIdPersona, 'Fijo', vTelefonoFijo);
+       insert into Telefonos values(vIdPersona, 'Movil', vTelefonoMovil);
+   end loop;
+END;
+
+execute LlenarTelefonos;
 
 
