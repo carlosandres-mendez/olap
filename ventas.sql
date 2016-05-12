@@ -1,7 +1,6 @@
---- En este esquema: Polizas, seguros, coberturas
 
---- Se conecta con el usuario ventas;
 
+--creación de tablas
 create table clientes(
 IdCliente     varchar2(30) NOT NULL,
 IdPersona     varchar2(30) NOT NULL,
@@ -37,7 +36,10 @@ IdSeguro	varchar2(30) NOT NULL,
 Nombre		varchar2(100),
 Monto 		decimal(10,2),
 Descripcion varchar2(200),
-CONSTRAINT pk_cobertura PRIMARY KEY (IdCobertura,IdSeguro))
+CONSTRAINT pk_cobertura PRIMARY KEY (IdCobertura,IdSeguro),
+CONSTRAINT fk_tiposeguro_coberturas 
+           foreign key(IdSeguro)
+           references tiposeguro(IdSeguro))
 tablespace ventas_tbs;
 
 create table polizas(
@@ -70,5 +72,47 @@ RelacionConCliente  varchar2(30),
 CONSTRAINT pk_beneficiarios PRIMARY KEY (IdBeneficiario),
 CONSTRAINT fk_perfisica_beneficiarios 
            foreign key(IdBeneficiario)
-           references rrhh.personas(IdBeneficiario))
+           references rrhh.personas(IdPersona))
 tablespace ventas_tbs;
+
+
+
+
+--- insertar en clientes
+
+--insertar clientes físicos
+
+declare
+  cursor personafisi is
+  select IDPERFISICA
+  from   rrhh.personasfisicas
+  where rownum<=100000;
+  
+begin
+  for perf in personafisi loop    
+        insert into clientes values(perf.IDPERFISICA, perf.IDPERFISICA, (SELECT DBMS_RANDOM.string('u', 1) FROM dual), (SELECT DBMS_RANDOM.string('u', 1) FROM dual));
+  end loop;
+end;
+
+select count(*) from clientes;
+
+---insertar lientes juridicos
+declare
+  cursor personafisi is
+  select IDPERJURIDICA
+  from   RRHH.PERSONASJURIDICAS
+  where rownum<=50;
+  
+begin
+  for perf in personafisi loop    
+        insert into clientes values(perf.IDPERJURIDICA, perf.IDPERJURIDICA, (SELECT DBMS_RANDOM.string('u', 1) FROM dual), (SELECT DBMS_RANDOM.string('u', 1) FROM dual));
+  end loop;
+end;
+
+
+
+
+
+
+
+
