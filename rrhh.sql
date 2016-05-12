@@ -1,6 +1,6 @@
 --- En este esquema: personas, direcciones, departamentos y empleados
 
---ejecitar desde la conección de parámetro
+--ejecitar desde la conecciÃ³n de parÃ¡metro
 
 grant select, update, delete, insert, references on cantones to rrhh
 grant select, update, delete, insert, references on distritos to rrhh;
@@ -157,7 +157,7 @@ Puntualidad			int,
 Rendimiento			int,
 Proactividad		int,
 Semestre 			varchar(30) NOT NULL,
-Año 				date,
+AÃ±o 				int,
 	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
 	CONSTRAINT fk_IdEmpleado
 		 foreign key (IdEmpleado)
@@ -167,16 +167,16 @@ Año 				date,
   
 CREATE TABLE pagos(
 IdEmpleado 			varchar(30) NOT NULL,
-Mes 				varchar(30) NOT NULL,
-Año 				date,
+Semestre 			varchar(30) NOT NULL,
+AÃ±o 				int,
 monto				int,
-	CONSTRAINT pk_pagos PRIMARY KEY (IdEmpleado, Mes, Año),
+	CONSTRAINT pk_pagos PRIMARY KEY (IdEmpleado, Semestre, AÃ±o),
 	CONSTRAINT fk_IdEmpleado_pagogos
 		 foreign key (IdEmpleado)
 		 references empleados(IdEmpleado));
     tablespace rrhh_tbs;
 
-
+	
 alter table empleados add CONSTRAINT fk_empleado_empleado
 			foreign key(Supervisor)
 			references empleados(IdEmpleado);
@@ -199,7 +199,7 @@ Constancia			int,
 Calidad_trabajo		int,
 Dinamismo			int,
 Semestre 			varchar(30) NOT NULL),
-Año 				date;
+AÃ±o 				int;
 	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
 	CONSTRAINT fk_IdEmpleado
 		 foreign key (IdEmpleado)
