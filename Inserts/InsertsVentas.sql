@@ -106,16 +106,43 @@ insert into coberturas values ('G','CKI', 'MULTIASISTENCIA AUTOMÓVILES',350000,
 insert into coberturas values ('G','VDA', 'MULTIASISTENCIA AUTOMÓVILES',200000,'Descripcion');
 
 -- EN PROCESO
-insert into coberturas values ('H','', 'RIESGOS ADICIONALES',100,'Descripcion');
-insert into coberturas values ('I','', 'RCE EXTENDIDA POR LESION Y/O MUERTE DE PERSONAS Y/O DAÑOS A LA PROPIEDAD DE TERCERAS´PERSONAS',100,'Descripcion');
-insert into coberturas values ('J','', 'PÉRDIDAS DE OBJETOS PERSONALES',100,'Descripcion');
-insert into coberturas values ('K','', 'INDEMNIZACIÓN PARA TRANSPORTE ALTERNATIVO',100,'Descripcion');
-insert into coberturas values ('L','', 'RCEE POR LESIÓN Y/O MUERTE DE PERSONAS Y/O DAÑOS A LA PROPIEDAD DE TERCERAS PERSONAS, POR EL USO DE UN  AUTO SUSTITUTO',100,'Descripcion');
-insert into coberturas values ('M','', 'MULTIASISTENCIA EXTENDIDA',100,'Descripcion');
-insert into coberturas values ('N','', 'MULTIASISTENCIA EXTENDIDA',100,'Descripcion');
-insert into coberturas values ('P','', 'SERVICIOS MÉDICOS FAMILIARES PLUS Y MUERTE DE LOS OCUPANTES DEL  VEHÍCULO ASEGURADO',100,'Descripcion');
-insert into coberturas values ('Y','', 'EXTRATERRITORIALIDAD',100,'Descripcion');
-insert into coberturas values ('Z','', 'RIESGOS PARTICULARES',100,'Descripcion');
+insert into coberturas values ('H','ACE', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','ACC', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','VJR', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','MED', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','ROB', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','SAL', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','TSI', 'RIESGOS ADICIONALES',100,'Descripcion');
+insert into coberturas values ('H','PRO', 'RIESGOS ADICIONALES',100,'Descripcion');
+
+
+
+insert into coberturas values ('I','DPT', 'RCE EXTENDIDA POR LESION Y/O MUERTE DE PERSONAS Y/O DAÑOS A LA PROPIEDAD DE TERCERAS´PERSONAS',100,'Descripcion');
+
+insert into coberturas values ('J','TSI', 'PÉRDIDAS DE OBJETOS PERSONALES',100,'Descripcion');
+insert into coberturas values ('K','ROB', 'INDEMNIZACIÓN PARA TRANSPORTE ALTERNATIVO',100,'Descripcion');
+
+insert into coberturas values ('L','SOA', 'RCEE POR LESIÓN Y/O MUERTE DE PERSONAS Y/O DAÑOS A LA PROPIEDAD DE TERCERAS PERSONAS, POR EL USO DE UN  AUTO SUSTITUTO',100,'Descripcion');
+insert into coberturas values ('L','VDA', 'RCEE POR LESIÓN Y/O MUERTE DE PERSONAS Y/O DAÑOS A LA PROPIEDAD DE TERCERAS PERSONAS, POR EL USO DE UN  AUTO SUSTITUTO',100,'Descripcion');
+insert into coberturas values ('L','SVI', 'RCEE POR LESIÓN Y/O MUERTE DE PERSONAS Y/O DAÑOS A LA PROPIEDAD DE TERCERAS PERSONAS, POR EL USO DE UN  AUTO SUSTITUTO',100,'Descripcion');
+
+insert into coberturas values ('M','SVI', 'MULTIASISTENCIA EXTENDIDA INDIVIDUAL',100,'Descripcion');
+insert into coberturas values ('M','MED', 'MULTIASISTENCIA EXTENDIDA INDIVIDUAL',100,'Descripcion');
+insert into coberturas values ('M','FID', 'MULTIASISTENCIA EXTENDIDA INDIVIDUAL',100,'Descripcion');
+insert into coberturas values ('M','GFU', 'MULTIASISTENCIA EXTENDIDA INDIVIDUAL',100,'Descripcion');
+
+insert into coberturas values ('N','ASC', 'MULTIASISTENCIA EXTENDIDA COLECTIVA',100,'Descripcion');
+insert into coberturas values ('N','PRO', 'MULTIASISTENCIA EXTENDIDA COLECTIVA',100,'Descripcion');
+insert into coberturas values ('N','GME', 'MULTIASISTENCIA EXTENDIDA COLECTIVA',100,'Descripcion');
+
+insert into coberturas values ('P','HCC', 'SERVICIOS MÉDICOS FAMILIARES PLUS Y MUERTE DE LOS OCUPANTES DEL  VEHÍCULO ASEGURADO',100,'Descripcion');
+
+insert into coberturas values ('Y','DPT', 'EXTRATERRITORIALIDAD',100,'Descripcion');
+
+insert into coberturas values ('Z','RDT', 'RIESGOS PARTICULARES',100,'Descripcion');
+insert into coberturas values ('Z','ACC', 'RIESGOS PARTICULARES',100,'Descripcion');
+insert into coberturas values ('Z','RDT', 'RIESGOS PARTICULARES',100,'Descripcion');
+
 
 
 -- cursor insercion polizas  
