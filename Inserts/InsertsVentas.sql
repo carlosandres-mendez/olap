@@ -9,7 +9,7 @@ CREATE SEQUENCE clienteid
   INCREMENT BY 1
   CACHE 20;
 
-CREATE SEQUENCE facturaid
+CREATE SEQUENCE polizaid
   MINVALUE 1
   MAXVALUE 999999999999999999999999999
   START WITH 1
@@ -150,46 +150,46 @@ insert into coberturas values ('Z','RDT', 'RIESGOS PARTICULARES',100,'Descripcio
 -- POR HACER
 -- podemos ayudarnos con este cursor que hizo el profe 
 
-truncate table factura;
+truncate table polizas;
 
 DECLARE
    CURSOR c1 is
       SELECT idcliente, idpersona FROM clientes where rownum < 2001;
    CURSOR c2 is
-      select idproducto, descproducto, unidadmedida, preciounidad
+      select IdSeguro, Prima, IdCobertura, Monto, Vigencia
       from (
-            select idproducto, descproducto, unidadmedida, preciounidad
+            select IdCobertura, IdSeguro, Monto
             from   coberturas
             order by dbms_random.value) r1
       where rownum = 1 or
-            rownum = trunc(dbms_random.value(1,6));
+            rownum = trunc(dbms_random.value(1,4)); -- cantidad de seguros por cliente  
    vcont          integer;
    vcont2         integer;
    vidcliente     varchar2(30);
    vidpersona     varchar2(30);
-   vcantfacturas  integer;
-   vidfactura     varchar2(30);
+   vcantpolizas  integer;
+   vNumPoliza     varchar2(30);
    vfecha         date;
    vcantcoberturas integer;
-   vcontlinea     integer;
+   vcontseguros     integer;
    vcontador      integer;
 BEGIN
    dbms_output.put_line ('fecha inicio '||to_char(sysdate,'dd-mm-yyyy:hh:mi:ss'));
    VCONT := 0;
-   vcantfacturas := 0;
+   vcantpolizas := 0;
    FOR i IN c1 LOOP
       vcont := vcont + 1;
       vidpersona := i.idpersona;
       vidcliente := i.idcliente;
       --DBMS_OUTPUT.put_line('idcliente es:'||vidcliente || ' ' || vidpersona);
-      vcantfacturas := 0;
+      vcantpolizas := 0;
       vcont2        := 0;
       select trunc(dbms_random.value(1,10)) 
-      into   vcantfacturas 
+      into   vcantpolizas
       from   dual;
       loop
           vcont2 := vcont2 + 1;
-          select to_char(facturaid.nextval) into vidfactura from dual;
+          select to_char(NumPoliza.nextval) into vNumPoliza from dual;
           select fecha
           into   vfecha
           from ( select fecha
@@ -197,7 +197,7 @@ BEGIN
                  where  fecha between to_date('01012010','ddmmyyyy') and to_date ('31122015','ddmmyyyy')
                  order by dbms_random.value)
           where rownum  = 1;
-          insert into factura values (vidfactura, vidcliente, null, null,null, vfecha);
+          insert into polizas values (vNumPoliza, vidcliente, null, null,null, vfecha);
           vcontlinea := 0;
           for j in c2 loop
               vcontlinea := vcontlinea + 1;
