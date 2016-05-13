@@ -1,6 +1,6 @@
 --- En este esquema: personas, direcciones, departamentos y empleados
 
---ejecitar desde la conecciÃ³n de parÃ¡metro
+--ejecitar desde la conección de parámetro
 
 grant select, update, delete, insert, references on cantones to rrhh
 grant select, update, delete, insert, references on distritos to rrhh;
@@ -60,6 +60,9 @@ CONSTRAINT fk_empleado_perfisica
            foreign key(IdEmpleado)
            references personasfisicas(IdPerfisica))
 tablespace rrhh_tbs;
+
+alter table empleados add constraint fk_empleado_perfisica foreign key(IdEmpleado)
+           references personasfisicas(IdPerfisica)
 
 create table telefonos(
 IdPersona  varchar2(30),
@@ -165,7 +168,7 @@ Puntualidad			int,
 Rendimiento			int,
 Proactividad		int,
 Semestre 			varchar(30) NOT NULL,
-AÃ±o 				int,
+Año 				date,
 	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
 	CONSTRAINT fk_IdEmpleado
 		 foreign key (IdEmpleado)
@@ -175,16 +178,16 @@ AÃ±o 				int,
   
 CREATE TABLE pagos(
 IdEmpleado 			varchar(30) NOT NULL,
-Semestre 			varchar(30) NOT NULL,
-AÃ±o 				int,
+Mes 				varchar(30) NOT NULL,
+Año 				date,
 monto				int,
-	CONSTRAINT pk_pagos PRIMARY KEY (IdEmpleado, Semestre, AÃ±o),
+	CONSTRAINT pk_pagos PRIMARY KEY (IdEmpleado, Mes, Año),
 	CONSTRAINT fk_IdEmpleado_pagogos
 		 foreign key (IdEmpleado)
 		 references empleados(IdEmpleado));
     tablespace rrhh_tbs;
 
-	
+
 alter table empleados add CONSTRAINT fk_empleado_empleado
 			foreign key(Supervisor)
 			references empleados(IdEmpleado);
@@ -207,7 +210,7 @@ Constancia			int,
 Calidad_trabajo		int,
 Dinamismo			int,
 Semestre 			varchar(30) NOT NULL),
-AÃ±o 				int;
+Año 				date;
 	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
 	CONSTRAINT fk_IdEmpleado
 		 foreign key (IdEmpleado)
@@ -370,16 +373,7 @@ cont:=0;
   end loop;
 end;
 
---administrador
-BEGIN
-for i in 1..50 loop
-  update sedes set administrador=(
-  SELECT letra FROM
-      ( SELECT letra FROM estadoCivil
-      ORDER BY dbms_random.value )
-      WHERE rownum = 1)
-end loop; 
-END;
+
 
 
 
@@ -399,7 +393,7 @@ insert into departamentos (iddepartamento,nombre) values(incrementar_id_departam
 insert into departamentos (iddepartamento,nombre) values(incrementar_id_departamentos.nextval,'Dirección de operaciones');
 
 
-select * from departamentos_sede
+select * from departamentos
 
 delete departamentos_sede
 
@@ -412,9 +406,66 @@ for i in 1..39 loop
 end loop;
 end;
 
+select * from departamentos_sede
+delete departamentos_sede
+
+---insertamos en empleados
+CREATE SEQUENCE incrementar_id_perfisicas
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 100;
+
+declare
+  cursor personafisi is
+  SELECT idperfisica 
+  FROM personasfisicas
+  where id>100201 and id<=100300;
+  
+begin
+  for emp in personafisi loop   
+    insert into empleados (idempleado,idperfisica,salario,comision,fecingreso,iddepartamento,idsede) 
+    values(incrementar_id_empleado.nextval, emp.idperfisica, 
+    (cast((select dbms_random.value(600000,1600000) num from dual) as decimal(10,0))), 
+    (cast((select dbms_random.value(3,10) num from dual) as decimal(4,0))),
+    (SELECT fecha FROM( SELECT fecha FROM fechas_aleatorias ORDER BY dbms_random.value ) WHERE rownum = 1),
+    (cast((select dbms_random.value(1,4) num from dual) as decimal(4,0))),
+    (SELECT idsede FROM( SELECT idsede FROM departamentos_sede ORDER BY dbms_random.value ) WHERE rownum = 1));
+  end loop;
+end;
+
+select * from empleados
+
+---insertar administrador en sede
+
+select * from sedes
+begin
+for i in 1..39 loop
+    update sedes set administrador = (cast((select dbms_random.value(9,205) num from dual) as decimal(4,0)))where idsede = i;
+end loop;
+end;
 
 
+---insertar gerente de departamento
 
-  
-  
-  
+select * from departamentos
+begin
+for i in 1..39 loop
+    update departamentos set idgerente = (cast((select dbms_random.value(9,205) num from dual) as decimal(4,0)))where iddepartamento = i;
+end loop;
+end;
+
+---insertamos en vendedor 
+CREATE SEQUENCE incrementar_id_vendedor
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 100;
+
+
+begin
+for i in 9..139 loop
+    insert into vendedores values(incrementar_id_vendedor.nextval,i);
+end loop;
+end;
+
+select * from vendedores;
+
