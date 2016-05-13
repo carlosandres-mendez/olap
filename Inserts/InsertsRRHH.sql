@@ -167,7 +167,7 @@ BEGIN
 
       WHILE vAñoAux < 2017 LOOP
 
-        IF vAñoAux = vAñoIngreso AND vMesIngreso < 7 THEN
+        IF vAñoAux != vAñoIngreso OR vMesIngreso < 7 THEN
           select trunc(dbms_random.value(60,100)) into  vPuntualidad from  dual;
           select trunc(dbms_random.value(30,100)) into  vRendimiento from  dual;
           select trunc(dbms_random.value(50,100)) into  vCalidad     from  dual;
@@ -236,7 +236,7 @@ BEGIN
 
       WHILE vAñoAux < 2017 LOOP
 
-        IF vAñoAux = vAñoIngreso AND vMesIngreso < 7 THEN
+        IF vAñoAux != vAñoIngreso OR vMesIngreso < 7 THEN
           select trunc(dbms_random.value(20,100)) into  vComunicacion from  dual;
           select trunc(dbms_random.value(30,100)) into  vLiderazgo    from  dual;
           select trunc(dbms_random.value(30,100)) into  vPertenencia  from  dual;
