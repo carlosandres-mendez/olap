@@ -129,3 +129,141 @@ execute LlenarPagos;
 
 select * from pagos
 order by idempleado,año,semestre;
+
+
+-- Procedimiento para llenar EvaluacionEmpleados
+
+-- Se supone que todos los empleados se mantienen trabajando actualmente en la empresa
+-- y ya les realizaron una evaluación en el I semestre de 2016.
+
+CREATE SEQUENCE evaluacionid
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 20;
+
+Create or Replace procedure LlenarEvaluacionEmpleados
+is
+Declare
+      vIdEvaluacion varchar2(30);
+      vAñoIngreso int;
+      vAñoAux int;
+      vMesIngreso int;
+      vPuntualidad     int;
+      vRendimiento     int;
+      vCalidad         int;
+      cursor c1 is
+             SELECT IdEmpleado, FecIngreso
+             FROM   empleados;
+BEGIN
+   FOR i in c1
+   LOOP
+
+      select to_char(i.FecIngreso,'yyyy') into vAñoIngreso from dual;
+      select to_char(i.FecIngreso,'mm') into vMesIngreso from dual;
+
+      vAñoAux := vAñoIngreso;
+
+      WHILE vAñoAux < 2017 LOOP
+
+        IF vAñoAux = vAñoIngreso AND vMesIngreso < 7 THEN
+          select trunc(dbms_random.value(60,100)) into  vPuntualidad from  dual;
+          select trunc(dbms_random.value(30,100)) into  vRendimiento from  dual;
+          select trunc(dbms_random.value(50,100)) into  vCalidad     from  dual;
+
+          vIdEvaluacion := evaluacionid.nextval;
+          insert into evaluacion_emp (vIdEvaluacion, IdEmpleado, Puntualidad, Rendimiento, Calidad, Semestre, Año)
+          values (vIdEvaluacion, i.IdEmpleado, vPuntualidad, vRendimiento, vCalidad, 'I', vAñoAux);
+
+        END IF;
+
+        IF vAñoAux != 2016 THEN
+          select trunc(dbms_random.value(60,100)) into  vPuntualidad from  dual;
+          select trunc(dbms_random.value(30,100)) into  vRendimiento from  dual;
+          select trunc(dbms_random.value(50,100)) into  vCalidad     from  dual;
+
+          vIdEvaluacion := evaluacionid.nextval;
+          insert into evaluacion_emp (vIdEvaluacion, IdEmpleado, Puntualidad, Rendimiento, Calidad, Semestre, Año)
+          values (vIdEvaluacion, i.IdEmpleado, vPuntualidad, vRendimiento, vCalidad, 'II', vAñoAux);
+        END IF;  
+
+        vAñoAux := vAñoAux + 1;
+
+      END LOOP;
+
+      EXIT WHEN c1%NOTFOUND; 
+   END LOOP;
+   commit;
+END;
+
+
+
+-- Procedimiento para llenar ClIMA ORGANIZACIONAL
+
+-- Se supone que todos los empleados se mantienen trabajando actualmente en la empresa
+-- y ya les realizaron una encuesta de clima organizacional en el I semestre de 2016.
+
+CREATE SEQUENCE climaid
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 20;
+
+Create or Replace procedure LlenarClimaOrganizacional
+is
+Declare
+      vIdEvaluacion   varchar2(30);
+      vAñoIngreso     int;
+      vAñoAux         int;
+      vMesIngreso     int;
+      vComunicacion   int;
+      vLiderazgo      int;
+      vPertenencia    int;
+      vMotivacion     int;
+      cursor c1 is
+             SELECT IdEmpleado, FecIngreso
+             FROM   empleados;
+BEGIN
+   FOR i in c1
+   LOOP
+
+      select to_char(i.FecIngreso,'yyyy') into vAñoIngreso from dual;
+      select to_char(i.FecIngreso,'mm') into vMesIngreso from dual;
+
+      vAñoAux := vAñoIngreso;
+
+      WHILE vAñoAux < 2017 LOOP
+
+        IF vAñoAux = vAñoIngreso AND vMesIngreso < 7 THEN
+          select trunc(dbms_random.value(20,100)) into  vComunicacion from  dual;
+          select trunc(dbms_random.value(30,100)) into  vLiderazgo    from  dual;
+          select trunc(dbms_random.value(30,100)) into  vPertenencia  from  dual;
+          select trunc(dbms_random.value( 0,100)) into  vMotivacion   from  dual;
+
+          vIdEvaluacion := climaid.nextval;
+          insert into evaluacion_emp (vIdEvaluacion, IdEmpleado, Comunicacion, Liderazgo, Pertenencia, Motivacion, Semestre, Año)
+          values (vIdEvaluacion, i.IdEmpleado, vPuntualidad, vRendimiento, vPertenencia, vMotivacion, 'I', vAñoAux);
+
+        END IF;
+
+        IF vAñoAux != 2016 THEN
+          select trunc(dbms_random.value(20,100)) into  vComunicacion from  dual;
+          select trunc(dbms_random.value(30,100)) into  vLiderazgo    from  dual;
+          select trunc(dbms_random.value(30,100)) into  vPertenencia  from  dual;
+          select trunc(dbms_random.value( 0,100)) into  vMotivacion   from  dual;
+
+          vIdEvaluacion := climaid.nextval;
+          insert into evaluacion_emp (vIdEvaluacion, IdEmpleado, Comunicacion, Liderazgo, Pertenencia, Motivacion, Semestre, Año)
+          values (vIdEvaluacion, i.IdEmpleado, vPuntualidad, vRendimiento, vPertenencia, vMotivacion, 'II', vAñoAux);
+        END IF;  
+
+        vAñoAux := vAñoAux + 1;
+
+      END LOOP;
+
+      EXIT WHEN c1%NOTFOUND; 
+   END LOOP;
+   commit;
+END;
