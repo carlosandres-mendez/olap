@@ -166,7 +166,7 @@ IdEvaluacion		int NOT NULL,
 IdEmpleado 			varchar(30) NOT NULL,
 Puntualidad			int,
 Rendimiento			int,
-Proactividad		int,
+Calidad     		int,
 Semestre 			varchar(30) NOT NULL,
 Año 				date,
 	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
@@ -200,17 +200,23 @@ alter table empleados add CONSTRAINT fk_empleado_sede
 			foreign key(IdSede)
 			references sedes(IdSede);
  
--- no recuerdo bien si esta tabla era la que por ejemplo decia... 
--- si un empleado habia faltado muchas veces por incapacidad.. o vendia poco..
--- Hay que arreglar esta tabla y pasarla al diagrama. 
+
+-- Segun Wikipedia: Clima Organizacional
+-- Es el ambiente generado por las emociones de los miembros de un grupo u organización, el cual está 
+-- relacionado con la motivación de los empleados.
+-- En el nivel individual se le conoce principalmente como clima psicológico.
+-- El clima psicológico se refiere a las percepciones de los trabajadores del ambiente de trabajo,
+-- captura las representaciones psicológicas significativas hechas por los trabajadores referentes 
+-- a la estructura, procesos y eventos que suceden en la organización
 CREATE TABLE clima_org(
 IdEvaluacion		int NOT NULL
 IdEmpleado 			varchar(30) NOT NULL,
-Constancia			int,
-Calidad_trabajo		int,
-Dinamismo			int,
-Semestre 			varchar(30) NOT NULL),
-Año 				date;
+Comunicacion		int,
+Liderazgo		    int,
+Pertenencia			int,
+Motivacion      int,
+Semestre 			  varchar(30) NOT NULL),
+Año 				    date;
 	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
 	CONSTRAINT fk_IdEmpleado
 		 foreign key (IdEmpleado)
