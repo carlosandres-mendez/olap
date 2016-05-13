@@ -254,98 +254,27 @@ BEGIN
 END;
 
 ---
---- Procedimiento para llenar telefonos
+--- Procedimiento para llenar Proveedores
 ---
-Create or Replace procedure LlenarTelefonos
+
+Create or Replace procedure LlenarProveedores
 is
   CURSOR c1 is
-      SELECT idpersona
-      FROM personas;  
+      SELECT IdPerjuridica
+      FROM rrhh.personasjuridicas;  
       
-   vIdPersona varchar2(30);
-   vTipoTelefono  varchar2(50);
-   vTelefonoFijo varchar2(13);
-   vTelefonoMovil varchar2(13);
-   
+  vIdPerjuridica varchar2(30);
+  vCont int;
 BEGIN
-   for i in c1 loop
-      vIdPersona :=i.idpersona;
-      
-      select trunc(dbms_random.value(20000000,29999999))
-      into vTelefonoFijo
-      from dual;
-      
-      select trunc(dbms_random.value(60000000,99999999))
-      into vTelefonoMovil
-      from dual;
-      
-       insert into Telefonos values(vIdPersona, 'Fijo', vTelefonoFijo);
-       insert into Telefonos values(vIdPersona, 'Movil', vTelefonoMovil);
-   end loop;
+  vCont:=0;
+  for i in c1 loop 
+    vIdPerjuridica :=i.IdPerjuridica;
+    vCont:= vCont+1;
+    insert into proveedores values(vCont,vIdPerjuridica,(SELECT DBMS_RANDOM.string('u', 9) FROM dual));
+  end loop; 
 END;
 
-execute LlenarTelefonos;
-select * from telefonos;
-
----
---- Procedimiento para llenar Pagos
----
-
--- Tienen que estar lleno el campo de salario de cada empleado en la tabla de empleado
--- Y esta bueno, solo que introduce los datos en un orden extraño
--- si lo quieren probar hagan la consulta de pagos con order by 
-Create or Replace procedure LlenarPagos
-is
-  CURSOR c1 is
-      SELECT idempleado, salario
-      FROM empleados;  
-    
-   cursor c2 (pAño int) is
-      
-      SELECT idempleado,monto
-      FROM pagos
-      where año= pAño and semestre ='I'; 
-      
-   vIdEmpleado varchar2(30);
-   vSalarioViejo  decimal(10,2);
-   vSalarioNuevo  decimal(10,2);
-   vAño int;
-   
-BEGIN
-    vAño:=2010;
-   for i in c1 loop
-      vIdEmpleado :=i.idempleado;
-      vSalarioViejo := i.salario;
-      vSalarioNuevo:= vSalarioViejo+(vSalarioViejo*0.05);  
-      
-      insert into Pagos values(vIdEmpleado, 'I', vAño, vSalarioNuevo);
-    end loop;
-    loop
-          for j in c2(vAño) loop
-            vIdEmpleado :=j.idempleado;
-            vSalarioViejo := j.monto;    
-            vSalarioNuevo:= vSalarioViejo+(vSalarioViejo*0.05);
-            
-             insert into Pagos values(vIdEmpleado, 'II', vAño, vSalarioNuevo);
-             vAño:=vAño+1;
-             
-            if vAño <2016 then
-              vSalarioViejo:=vSalarioNuevo;
-              vSalarioNuevo:= vSalarioViejo+(vSalarioViejo*0.05);
-              insert into Pagos values(vIdEmpleado, 'I', vAño, vSalarioNuevo);
-            end if;
-            vAño:=vAño-1;
-        end loop;
-        vAño:=vAño+1;
-      exit when vAño >2015;
-  end loop;
-    
-END;
-
-execute LlenarPagos;
-
-select * from pagos
-order by idempleado,año,semestre;
+execute LlenarProveedores;
 
 
-
+select * from proveedores;

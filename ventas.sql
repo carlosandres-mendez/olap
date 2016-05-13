@@ -96,7 +96,7 @@ end;
 
 select count(*) from clientes;
 
----insertar lientes juridicos
+---insertar clientes juridicos
 declare
   cursor personafisi is
   select IDPERJURIDICA

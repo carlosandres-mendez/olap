@@ -36,8 +36,9 @@ BEGIN
    dbms_output.put_line('la cantidad de personas fisicas es ' || vcant);
 END;
 
------------Insert de Telefonos
-
+---
+--- Procedimiento para llenar telefonos
+---
 Create or Replace procedure LlenarTelefonos
 is
   CURSOR c1 is
@@ -67,5 +68,64 @@ BEGIN
 END;
 
 execute LlenarTelefonos;
+select * from telefonos;
 
+---
+--- Procedimiento para llenar Pagos
+---
 
+-- Tienen que estar lleno el campo de salario de cada empleado en la tabla de empleado
+-- Y esta bueno, solo que introduce los datos en un orden extraño
+-- si lo quieren probar hagan la consulta de pagos con order by 
+Create or Replace procedure LlenarPagos
+is
+  CURSOR c1 is
+      SELECT idempleado, salario
+      FROM empleados;  
+    
+   cursor c2 (pAño int) is
+      
+      SELECT idempleado,monto
+      FROM pagos
+      where año= pAño and semestre ='I'; 
+      
+   vIdEmpleado varchar2(30);
+   vSalarioViejo  decimal(10,2);
+   vSalarioNuevo  decimal(10,2);
+   vAño int;
+   
+BEGIN
+    vAño:=2010;
+   for i in c1 loop
+      vIdEmpleado :=i.idempleado;
+      vSalarioViejo := i.salario;
+      vSalarioNuevo:= vSalarioViejo+(vSalarioViejo*0.05);  
+      
+      insert into Pagos values(vIdEmpleado, 'I', vAño, vSalarioNuevo);
+    end loop;
+    loop
+          for j in c2(vAño) loop
+            vIdEmpleado :=j.idempleado;
+            vSalarioViejo := j.monto;    
+            vSalarioNuevo:= vSalarioViejo+(vSalarioViejo*0.05);
+            
+             insert into Pagos values(vIdEmpleado, 'II', vAño, vSalarioNuevo);
+             vAño:=vAño+1;
+             
+            if vAño <2016 then
+              vSalarioViejo:=vSalarioNuevo;
+              vSalarioNuevo:= vSalarioViejo+(vSalarioViejo*0.05);
+              insert into Pagos values(vIdEmpleado, 'I', vAño, vSalarioNuevo);
+            end if;
+            vAño:=vAño-1;
+        end loop;
+        vAño:=vAño+1;
+      exit when vAño >2015;
+  end loop;
+    
+END;
+
+execute LlenarPagos;
+
+select * from pagos
+order by idempleado,año,semestre;
