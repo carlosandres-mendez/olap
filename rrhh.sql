@@ -2,15 +2,15 @@
 
 --ejecitar desde la conección de parámetro
 
-grant select, update, delete, insert, references on cantones to rrhh
+grant select, update, delete, insert, references on cantones to rrhh;
 grant select, update, delete, insert, references on distritos to rrhh;
 grant select, update, delete, insert, references on provincias to rrhh;
 
 --ejecutar e4sto para que ventas pueda ver personas 
-grant select, update, delete, insert, references on personas to ventas
-grant select, update, delete, insert, references on personasjuridicas to ventas
-grant select, update, delete, insert, references on vendedores to ventas
-grant select, update, delete, insert, references on personasfisicas to ventas
+grant select, update, delete, insert, references on personas to ventas;
+grant select, update, delete, insert, references on personasjuridicas to ventas;
+grant select, update, delete, insert, references on vendedores to ventas;
+grant select, update, delete, insert, references on personasfisicas to ventas;
 
 
 --- Se conecta con el usuario rrhh;
@@ -57,12 +57,12 @@ Supervisor	varchar2(30),
 IdSede		varchar2(30),
 CONSTRAINT pf_empleados PRIMARY KEY (IdEmpleado),
 CONSTRAINT fk_empleado_perfisica
-           foreign key(IdEmpleado)
+           foreign key(IdPerfisica)
            references personasfisicas(IdPerfisica))
 tablespace rrhh_tbs;
 
-alter table empleados add constraint fk_empleado_perfisica foreign key(IdEmpleado)
-           references personasfisicas(IdPerfisica)
+--alter table empleados add constraint fk_empleado_perfisica foreign key(IdEmpleado)
+--           references personasfisicas(IdPerfisica) -- constraint repetido
 
 create table telefonos(
 IdPersona  varchar2(30),
@@ -184,7 +184,7 @@ monto				int,
 	CONSTRAINT pk_pagos PRIMARY KEY (IdEmpleado, Mes, Año),
 	CONSTRAINT fk_IdEmpleado_pagogos
 		 foreign key (IdEmpleado)
-		 references empleados(IdEmpleado));
+		 references empleados(IdEmpleado))
     tablespace rrhh_tbs;
 
 
