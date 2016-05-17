@@ -28,8 +28,6 @@ where rownum < 100001;
 
 -- insercion proveedores
 
-
-
 -- insercion tiposeguro
 -- IdSeguro Nombre Prima Vigencia
 -- Ojo* Cambiar en tabla: Vigencia es solo un varchar 
@@ -142,7 +140,6 @@ insert into coberturas values ('Y','DPT', 'EXTRATERRITORIALIDAD',100,'Descripcio
 insert into coberturas values ('Z','RDT', 'RIESGOS PARTICULARES',100,'Descripcion');
 insert into coberturas values ('Z','ACC', 'RIESGOS PARTICULARES',100,'Descripcion');
 insert into coberturas values ('Z','RDT', 'RIESGOS PARTICULARES',100,'Descripcion');
-
 
 
 -- cursor insercion polizas  
@@ -278,3 +275,34 @@ execute LlenarProveedores;
 
 
 select * from proveedores;
+
+--- insertar en clientes
+
+--insertar clientes físicos
+
+declare
+  cursor personafisi is
+  select IDPERFISICA
+  from   rrhh.personasfisicas
+  where rownum<=100000;
+  
+begin
+  for perf in personafisi loop    
+        insert into clientes values(perf.IDPERFISICA, perf.IDPERFISICA, (SELECT DBMS_RANDOM.string('u', 1) FROM dual), (SELECT DBMS_RANDOM.string('u', 1) FROM dual));
+  end loop;
+end;
+
+select count(*) from clientes;
+
+---insertar clientes juridicos
+declare
+  cursor personafisi is
+  select IDPERJURIDICA
+  from   RRHH.PERSONASJURIDICAS
+  where rownum<=50;
+  
+begin
+  for perf in personafisi loop    
+        insert into clientes values(perf.IDPERJURIDICA, perf.IDPERJURIDICA, (SELECT DBMS_RANDOM.string('u', 1) FROM dual), (SELECT DBMS_RANDOM.string('u', 1) FROM dual));
+  end loop;
+end;
