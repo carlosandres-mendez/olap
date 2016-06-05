@@ -267,15 +267,97 @@ BEGIN
   for i in c1 loop 
     vIdPerjuridica :=i.IdPerjuridica;
     vCont:= vCont+1;
-    insert into proveedores values(vCont,vIdPerjuridica,(SELECT DBMS_RANDOM.string('u', 9) FROM dual));
+    insert into proveedoresins (idproveedor,idperjuridica) values(vCont,vIdPerjuridica);
   end loop; 
 END;
 
 execute LlenarProveedores;
 
+CREATE TABLE NombreProveedores
+( 
+  idnp int not null,
+  nombreProveedor varchar2(50) NOT NULL
+);
 
-select * from proveedores;
+ALTER TABLE NombreProveedores
+ADD CONSTRAINT pk_NombreProveedores PRIMARY KEY (nombreProveedor);
 
+insert into NombreProveedores values(1,'Advanced Cath');
+insert into NombreProveedores values(2,'Applied Medical Precision');
+insert into NombreProveedores values(3,'Cincotek');
+insert into NombreProveedores values(4,'G.Rau ');
+insert into NombreProveedores values(5,'International Precision Molds');
+insert into NombreProveedores values(6,'Kelpac Medical');
+insert into NombreProveedores values(7,'MedConx');
+insert into NombreProveedores values(8,'Merrill’s Packaging');
+insert into NombreProveedores values(9,'Micro Technologies');
+insert into NombreProveedores values(10,'Microbiological Compliance Lab');
+
+insert into NombreProveedores values(11,'National Building Maintenance');
+insert into NombreProveedores values(12,'Neometrics');
+insert into NombreProveedores values(13,'Oberg Industries');
+insert into NombreProveedores values(14,'Okay Industries');
+insert into NombreProveedores values(15,'Penn United');
+insert into NombreProveedores values(16,'Precision Wire Components');
+insert into NombreProveedores values(17,'Prent');
+insert into NombreProveedores values(18,'Nelipak');
+insert into NombreProveedores values(19,'Specialty Coating Systems');
+insert into NombreProveedores values(20,'Veridiam Medical');
+
+insert into NombreProveedores values(21,'Accenture');
+insert into NombreProveedores values(22,'Costa Rica Production');
+insert into NombreProveedores values(23,'Magma Studios');
+insert into NombreProveedores values(24,'Paprika');
+insert into NombreProveedores values(25,'Pop Digital');
+insert into NombreProveedores values(26,'Possible');
+insert into NombreProveedores values(27,'The Hangar Interactive');
+insert into NombreProveedores values(28,'Crane');
+insert into NombreProveedores values(29,'GNFT ');
+insert into NombreProveedores values(30,'L3 Communications');
+
+insert into NombreProveedores values(31,'Panduit');
+insert into NombreProveedores values(32,'Promotel');
+insert into NombreProveedores values(33,'Suttle');
+insert into NombreProveedores values(34,'Eaton');
+insert into NombreProveedores values(35,'Havells Sylvania');
+insert into NombreProveedores values(36,'Phelps Dodge');
+insert into NombreProveedores values(37,'Triquint');
+insert into NombreProveedores values(38,'Electrotechnik');
+insert into NombreProveedores values(39,'Merlin VMS');
+insert into NombreProveedores values(40,'Samtec');
+
+insert into NombreProveedores values(41,'Altanova');
+insert into NombreProveedores values(42,'Avionix');
+insert into NombreProveedores values(43,'Emerson');
+insert into NombreProveedores values(44,'Intel EDC');
+insert into NombreProveedores values(45,'National Instruments');
+insert into NombreProveedores values(46,'Twin Engines');
+insert into NombreProveedores values(47,'Camtronics');
+insert into NombreProveedores values(48,'ClamCleat');
+insert into NombreProveedores values(49,'General Microcircuits');
+insert into NombreProveedores values(50,'Irazu Electronics');
+
+----Llenar os nombres De los proveedores
+Create or Replace procedure LlenarNombresProveedores
+is
+  CURSOR c1 is
+      SELECT idproveedor
+      FROM ventas.proveedoresins; 
+      
+      vCont int;
+
+BEGIN
+  vCont:=1;
+  for i in c1 loop 
+                      
+  update proveedoresins set nombre = (select nombreproveedor from NombreProveedores where idnp= vCont) where idproveedor= i.idproveedor ;
+  end loop; 
+END;
+
+execute LlenarNombresProveedores;
+
+select * from NombreProveedores;
+select * from proveedoresins;
 --- insertar en clientes
 
 --insertar clientes físicos
@@ -288,11 +370,11 @@ declare
   
 begin
   for perf in personafisi loop    
-        insert into clientes values(perf.IDPERFISICA, perf.IDPERFISICA, (SELECT DBMS_RANDOM.string('u', 1) FROM dual), (SELECT DBMS_RANDOM.string('u', 1) FROM dual));
+        insert into clientesins values(perf.IDPERFISICA, perf.IDPERFISICA, (SELECT DBMS_RANDOM.string('u', 1) FROM dual), (SELECT DBMS_RANDOM.string('u', 1) FROM dual));
   end loop;
 end;
 
-select count(*) from clientes;
+select count(*) from clientesins;
 
 ---insertar clientes juridicos
 declare
@@ -303,6 +385,116 @@ declare
   
 begin
   for perf in personafisi loop    
-        insert into clientes values(perf.IDPERJURIDICA, perf.IDPERJURIDICA, (SELECT DBMS_RANDOM.string('u', 1) FROM dual), (SELECT DBMS_RANDOM.string('u', 1) FROM dual));
+        insert into clientesins values(perf.IDPERJURIDICA, perf.IDPERJURIDICA, (SELECT DBMS_RANDOM.string('u', 1) FROM dual), (SELECT DBMS_RANDOM.string('u', 1) FROM dual));
   end loop;
 end;
+
+--Para Llenar profesiones y nivel Academico
+
+CREATE TABLE profesiones
+( 
+  nombreprofesion varchar2(50) NOT NULL
+);
+
+CREATE TABLE nivelAcademico
+( 
+  nombreNivel varchar2(50) NOT NULL
+);
+
+ALTER TABLE profesiones
+ADD CONSTRAINT pk_profesiones PRIMARY KEY (nombreprofesion);
+
+ALTER TABLE nivelAcademico
+ADD CONSTRAINT pk_nivelAcademico PRIMARY KEY (nombreNivel);
+
+insert into profesiones values('médico');
+insert into profesiones values('abogado');
+insert into profesiones values('biólogo');
+insert into profesiones values('cardiólogo');
+insert into profesiones values('arquitecto');
+insert into profesiones values('geólogo');
+insert into profesiones values('gerente de ventas');
+insert into profesiones values('dentista');
+insert into profesiones values('actor');
+insert into profesiones values('patólogo');
+
+insert into profesiones values('contador');
+insert into profesiones values('electricista');
+insert into profesiones values('topógrafo');
+insert into profesiones values('entrenador personal');
+insert into profesiones values('químico');
+insert into profesiones values('informático');
+insert into profesiones values('escultor');
+insert into profesiones values('fotógrafo');
+insert into profesiones values('albañil');
+insert into profesiones values('pintor');
+
+insert into profesiones values('periodista');
+insert into profesiones values('veterinario');
+insert into profesiones values('astronauta');
+insert into profesiones values('físico');
+insert into profesiones values('profesor');
+insert into profesiones values('gastrónomo');
+insert into profesiones values('astrólogo');
+insert into profesiones values('pastor');
+insert into profesiones values('cantante');
+insert into profesiones values('compositor');
+
+insert into profesiones values('juez');
+insert into profesiones values('fiscal');
+insert into profesiones values('demonólogo');
+insert into profesiones values('chef');
+insert into profesiones values('publicista');
+insert into profesiones values('ingeniero civil');
+insert into profesiones values('policia');
+insert into profesiones values('investigador privado');
+insert into profesiones values('catador profesional');
+insert into profesiones values('bombero');
+
+insert into profesiones values('mecánico');
+insert into profesiones values('guarda de seguridad');
+insert into profesiones values('guardaespaldas');
+insert into profesiones values('criminólogo');
+insert into profesiones values('detective');
+insert into profesiones values('chofer de autobus');
+insert into profesiones values('piloto');
+insert into profesiones values('pastelero');
+insert into profesiones values('psicólogo');
+insert into profesiones values('filólogo');
+
+insert into nivelAcademico values('Bachiller');
+insert into nivelAcademico values('Licenciado');
+insert into nivelAcademico values('Master');
+insert into nivelAcademico values('Doctor');
+
+
+Create or Replace procedure LlenarProfesiones_NivelAcademico
+is
+  CURSOR c1 is
+      SELECT Idcliente
+      FROM ventas.clientesins;  
+BEGIN
+  
+  for i in c1 loop 
+                      
+  update clientesins set profesion = (select nombreprofesion from (
+                                      SELECT nombreprofesion
+                                      FROM profesiones
+                                      ORDER BY dbms_random.value)
+                                      where rownum=1)
+                      where idcliente= i.Idcliente;
+                      
+   update clientesins set nivel_aca = (select nombreNivel from (
+                                      SELECT nombreNivel
+                                      FROM nivelAcademico
+                                      ORDER BY dbms_random.value)
+                                      where rownum=1)
+                      where idcliente= i.Idcliente;
+  end loop; 
+END;
+
+execute LlenarProfesiones_NivelAcademico;
+
+select * from nivelAcademico;
+select * from profesiones;
+select * from clientesins;
