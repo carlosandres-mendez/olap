@@ -25,8 +25,8 @@ IdCliente     varchar2(30) NOT NULL,
 IdPersona     varchar2(30) NOT NULL,
 Profesion     varchar2(60),
 Nivel_Aca     varchar2(60),
-CONSTRAINT pk_clientesins PRIMARY KEY (IdCliente))--,
---CONSTRAINT fk_persona_clientes foreign key(IdPersona) references rrhh.personas(IdPersona))
+CONSTRAINT pk_clientesins PRIMARY KEY (IdCliente), --yo descomenté este constraint (carlos)
+CONSTRAINT fk_persona_clientes foreign key(IdPersona) references rrhh.personas(IdPersona))
 tablespace data_tbs;
 
 drop table clientesINS;
@@ -35,7 +35,7 @@ select count(*) from clientesINS; -- hay 100 000 clientes
 select * from rrhh.personas;  -- isssue
 
 --- insertar en clientes creacion de secuencia  y cursor para insertarlos 
-
+--drop sequence clientesid;  puede ser necesario (carlos)
 CREATE SEQUENCE clientesid
   MINVALUE 1
   MAXVALUE 999999999999999999999999999
@@ -49,7 +49,8 @@ declare
   where rownum<=100000;
 begin
   for i in m loop    
-        insert into clientesINS values(i.IDPERSONA, clientesid.nextval, null, null);
+        -- insert into clientesINS values(i.IDPERSONA, clientesid.nextval, null, null);
+         insert into clientesINS values(clientesid.nextval, i.IDPERSONA, null, null);
   end loop;
 end;
 
@@ -65,20 +66,23 @@ select * from vendedor;
 commit;
 select * from proveedoresINS;
 
+grant select, references on personas to ventas;  -- correr esto en rrhh
+grant select, references on personasjuridicas to ventas;  -- correr esto en rrhh
+
 create table proveedoresINS(
 IdProveedor     varchar2(30) NOT NULL,
 IdPerjuridica   varchar2(30) NOT NULL,
 Nombre     		varchar2(60),
-CONSTRAINT pk_proveedoresins PRIMARY KEY (IdProveedor))--,
---CONSTRAINT fk_perjuridica_proveedores foreign key(IdPerjuridica) references rrhh.personasjuridicas(IdPerjuridica))
-tablespace data_tbs;
+CONSTRAINT pk_proveedoresins PRIMARY KEY (IdProveedor), --ya existen las personasjuridicas se puede descomentar(carlos)
+CONSTRAINT fk_perjuridica_proveedores foreign key(IdPerjuridica) references rrhh.personasjuridicas(IdPerjuridica))
+tablespace ventas_tbs;
 CREATE SEQUENCE proveedoresid
   MINVALUE 1
   MAXVALUE 999999999999999999999999999
   START WITH 1
   INCREMENT BY 1
   CACHE 20; 
-
+/*
 declare
   cursor m is
   select IDPERFISICA
@@ -89,7 +93,7 @@ begin
         insert into proveedoresINS values(i.IDPERFISICA, clientesid.nextval, null);
   end loop;
 end;
-
+*/
 create table relacionFamiliar(
 relacion 		varchar2(30)
 );
@@ -145,7 +149,8 @@ begin
             FROM RELACIONFAMILIAR 
             order by dbms_random.value) 
       where rownum = 1;
-        insert into beneficiariosINS values(i.IDPERFISICA, clientesid.nextval, vrelacion,vnumpoliza );
+        --insert into beneficiariosINS values(i.IDPERFISICA, clientesid.nextval, vrelacion,vnumpoliza );
+          insert into beneficiariosINS values(beneficiarioid.nextval, i.IDPERFISICA, vrelacion,vnumpoliza );
   end loop;
 end;
 
@@ -254,7 +259,7 @@ insert into coberturasINS values ('Z','RDT', 'RIESGOS PARTICULARES',19,'Descripc
 insert into coberturasINS values ('Z','ACC', 'RIESGOS PARTICULARES',16,'Descripcion');
 insert into coberturasINS values ('Z','ACE', 'RIESGOS PARTICULARES',15,'Descripcion');
 insert into coberturasINS values ('Z','INC', 'RIESGOS PARTICULARES',15,'Descripcion');
-
+drop sequence polizaid;
 CREATE SEQUENCE polizaid
   MINVALUE 1
   MAXVALUE 999999999999999999999999999

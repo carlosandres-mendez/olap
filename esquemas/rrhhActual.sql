@@ -1,16 +1,16 @@
 select * from personasfisicas; 
 select * from personasjuridicas; -- falta 
 
-grant select, update, delete, insert, references on cantones to rrhh;
-grant select, update, delete, insert, references on distritos to rrhh;
-grant select, update, delete, insert, references on provincias to rrhh;
+grant select, references on cantones to rrhh;
+grant select, references on distritos to rrhh;
+grant select, references on provincias to rrhh;
 
 --ejecutar e4sto para que ventas pueda ver personas 
-grant select, update, delete, insert, references on personas to ventas;
-grant select, update, delete, insert, references on personasjuridicas to ventas;
-grant select, update, delete, insert, references on vendedores to ventas;
-grant select, update, delete, insert, references on personasfisicas to ventas;
-grant select, update, delete, insert, references on empleados to ventas;
+grant select, references on personas to ventas;
+grant select, references on personasjuridicas to ventas;
+grant select, references on vendedores to ventas;
+grant select, references on personasfisicas to ventas;
+grant select, references on empleados to ventas;
 -- entregado 
 select * from departamentos;
 select * from DEPARTAMENTOS_SEDE;
@@ -148,6 +148,17 @@ END;
 execute LlenarTelefonos;
 select * from telefonos;
 
+--- Carlos: pongo Año como INT y cambio Mes x Semestre
+drop table "RRHH"."PAGOS";
+  CREATE TABLE "RRHH"."PAGOS" 
+   (  IdEmpleado VARCHAR2(30 BYTE) NOT NULL ENABLE, 
+  Semestre VARCHAR2(30 BYTE) NOT NULL ENABLE, 
+  Año INT, 
+  Monto NUMBER(*,0), 
+   CONSTRAINT "PK_PAGOS" PRIMARY KEY (IdEmpleado, Semestre, Año), 
+   CONSTRAINT "FK_IDEMPLEADO_PAGOGOS" FOREIGN KEY (IdEmpleado)
+    REFERENCES "RRHH"."EMPLEADOS" (IdEmpleado) ENABLE
+   ) TABLESPACE "RRHH_TBS";
 ---
 --- Procedimiento para llenar Pagos
 ---
@@ -205,3 +216,82 @@ END;
 
 execute LlenarPagos;
   
+
+-- CARLOS
+--******* Script para mover dipersonas de parametros a rrhh *******
+
+-- este grant en parametros
+grant select , references on cantones to rrhh;
+grant select , references on distritos to rrhh;
+grant select , references on provincias to rrhh;
+
+drop table RRHH.DIRPERSONAS;
+
+CREATE TABLE "RRHH"."DIRPERSONAS" 
+   (  "IDPERSONA" VARCHAR2(30 BYTE), 
+  "IDTIPODIR" VARCHAR2(10 BYTE), 
+  "IDPROVINCIA" VARCHAR2(10 BYTE), 
+  "IDCANTON" VARCHAR2(10 BYTE), 
+  "IDDISTRITO" VARCHAR2(10 BYTE), 
+  "DETALLE" VARCHAR2(200 BYTE), 
+   CONSTRAINT "PK_DIRPERSONAS" PRIMARY KEY ("IDPERSONA", "IDTIPODIR"), 
+   CONSTRAINT "FK_DIRPERSONAS_CANTONES" FOREIGN KEY ("IDPROVINCIA", "IDCANTON")
+    REFERENCES "PARAMETROS"."CANTONES" ("IDPROVINCIA", "IDCANTON") ENABLE, 
+   CONSTRAINT "FK_DIRPERSONAS_DISTRITOS" FOREIGN KEY ("IDPROVINCIA", "IDCANTON", "IDDISTRITO")
+    REFERENCES "PARAMETROS"."DISTRITOS" ("IDPROVINCIA", "IDCANTON", "IDDISTRITO") ENABLE, 
+   CONSTRAINT "FK_DIRPERSONAS_PERSONAS" FOREIGN KEY ("IDPERSONA")
+    REFERENCES "RRHH"."PERSONAS" ("IDPERSONA") ENABLE, 
+   CONSTRAINT "FK_DIRPERSONAS_PROVINCIAS" FOREIGN KEY ("IDPROVINCIA")
+    REFERENCES "PARAMETROS"."PROVINCIAS" ("IDPROVINCIA") ENABLE
+   ) TABLESPACE "RRHH_TBS";
+
+
+-- Insertar en rrhh.dirpersonas (con los datos de parametros.dirpersonas) 
+DECLARE
+   CURSOR c1 is
+      SELECT idpersona FROM rrhh.personas;
+   CURSOR c2 (pIdPersona varchar2) is
+      select idpersona, idtipodir, idprovincia, idcanton, iddistrito, detalle
+      from   parametros.dirpersonas
+      where  idpersona = pIdPersona;
+BEGIN
+   for i in c1 loop
+      for j in c2(i.idpersona) loop
+          INSERT INTO rrhh.DIRPERSONAS (idpersona, idtipodir, idprovincia, idcanton, iddistrito, detalle) 
+            VALUES(j.idpersona, j.idtipodir, j.idprovincia, j.idcanton, j.iddistrito, j.detalle);
+          EXIT WHEN c2%NOTFOUND;
+      end loop;
+      EXIT WHEN c1%NOTFOUND;
+   end loop;
+END;
+
+
+--********* Persona Juridica ********
+drop table rrhh.personasjuridicas;
+
+create table personasjuridicas(
+IdPerJuridica   varchar2(30) NOT NULL,
+CONSTRAINT pk_personasjuridicas PRIMARY KEY (IdPerJuridica),
+CONSTRAINT fk_perjuridica_persona 
+           foreign key(IdPerJuridica)
+           references personas(IdPersona)
+           ) tablespace rrhh_tbs;
+
+CREATE SEQUENCE perjuridica
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 20;
+
+DECLARE
+  ID varchar2(30);
+BEGIN
+FOR i in 1..50 -- por el momento vamos a tener 50 proveedores
+  LOOP
+    ID := perjuridica.nextval;
+    INSERT INTO RRHH.PERSONAS (IDPERSONA, TIPOPERSONA) VALUES(ID,'J');
+    INSERT INTO PERSONASJURIDICAS (IDPERJURIDICA) VALUES(ID);
+  END LOOP;
+END;
+

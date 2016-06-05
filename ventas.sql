@@ -1,4 +1,4 @@
-
+-- Ya haber creado tablas de rrhh y haberle dado grants a rrhh to ventas
 --creación de tablas
 create table clientes(
 IdCliente     varchar2(30) NOT NULL,

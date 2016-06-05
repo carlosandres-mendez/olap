@@ -59,3 +59,12 @@ begin
   end loop; 
 end;  
 
+
+-- CARLOS
+
+grant select , references on cantones to rrhh;
+grant select , references on distritos to rrhh;
+grant select , references on provincias to rrhh;
+
+
+  
