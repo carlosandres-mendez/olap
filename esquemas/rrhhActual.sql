@@ -245,7 +245,7 @@ CREATE TABLE "RRHH"."DIRPERSONAS"
     REFERENCES "PARAMETROS"."PROVINCIAS" ("IDPROVINCIA") ENABLE
    ) TABLESPACE "RRHH_TBS";
 
-
+ 
 -- Insertar en rrhh.dirpersonas (con los datos de parametros.dirpersonas) 
 DECLARE
    CURSOR c1 is

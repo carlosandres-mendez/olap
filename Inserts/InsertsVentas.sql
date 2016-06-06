@@ -336,7 +336,7 @@ insert into NombreProveedores values(47,'Camtronics');
 insert into NombreProveedores values(48,'ClamCleat');
 insert into NombreProveedores values(49,'General Microcircuits');
 insert into NombreProveedores values(50,'Irazu Electronics');
-
+ 
 ----Llenar os nombres De los proveedores
 Create or Replace procedure LlenarNombresProveedores
 is

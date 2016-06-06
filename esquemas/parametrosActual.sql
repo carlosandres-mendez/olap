@@ -35,7 +35,7 @@ CREATE TABLE Tiempo (
 );
 ALTER TABLE Tiempo
        ADD PRIMARY KEY (TiempoID);
-      
+ 
 declare
 FechaFin date;
 Fecha date;
@@ -67,4 +67,3 @@ grant select , references on distritos to rrhh;
 grant select , references on provincias to rrhh;
 
 
-  

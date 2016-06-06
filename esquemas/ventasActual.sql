@@ -1,5 +1,5 @@
 
-
+  
 --Tabla tiposeguro permanece igual. 
 drop table polizas;    -- nueva tabla - polizasINS
 drop table cobertura;   -- nueva tabla - coberturasINS

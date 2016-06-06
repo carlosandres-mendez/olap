@@ -73,3 +73,4 @@ CONSTRAINT fk_perfisica_beneficiarios
            foreign key(IdBeneficiario)
            references rrhh.personas(IdPersona))
 tablespace ventas_tbs;
+ 
