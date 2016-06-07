@@ -29,19 +29,19 @@ select * from dirpersonas;
 select * from evaluacion_emp;
 
 CREATE TABLE clima_org(
-IdEvaluacion		int NOT NULL
+IdEvaluacion		varchar(30) NOT NULL,
 IdEmpleado 			varchar(30) NOT NULL,
 Comunicacion		int,
 Liderazgo		    int,
 Pertenencia			int,
 Motivacion      int,
-Semestre 			  varchar(30) NOT NULL),
-Año 				    date;
-	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
-	CONSTRAINT fk_IdEmpleado
+Semestre 			  varchar(30) NOT NULL,
+Año 				    int,
+	CONSTRAINT pk_IdClima_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
+	CONSTRAINT fk_IdEmpleadoClima
 		 foreign key (IdEmpleado)
-		 references empleados(IdEmpleado)
-    tablespace data_tbs;
+		 references empleados(IdEmpleado))
+    tablespace rrhh_tbs;
 
 select * from clima_org;
 
@@ -59,7 +59,7 @@ CREATE SEQUENCE climaid
 
 Create or Replace procedure LlenarClimaOrganizacional
 is
-Declare
+
       vIdEvaluacion   varchar2(30);
       vAñoIngreso     int;
       vAñoAux         int;
@@ -89,8 +89,8 @@ BEGIN
           select trunc(dbms_random.value( 0,100)) into  vMotivacion   from  dual;
 
           vIdEvaluacion := climaid.nextval;
-          insert into evaluacion_emp (vIdEvaluacion, IdEmpleado, Comunicacion, Liderazgo, Pertenencia, Motivacion, Semestre, Año)
-          values (vIdEvaluacion, i.IdEmpleado, vPuntualidad, vRendimiento, vPertenencia, vMotivacion, 'I', vAñoAux);
+          insert into clima_org (IdEvaluacion, IdEmpleado, Comunicacion, Liderazgo, Pertenencia, Motivacion, Semestre, Año)
+          values (vIdEvaluacion, i.IdEmpleado, vComunicacion, vLiderazgo, vPertenencia, vMotivacion, 'I', vAñoAux);
 
         END IF;
 
@@ -101,8 +101,8 @@ BEGIN
           select trunc(dbms_random.value( 0,100)) into  vMotivacion   from  dual;
 
           vIdEvaluacion := climaid.nextval;
-          insert into evaluacion_emp (vIdEvaluacion, IdEmpleado, Comunicacion, Liderazgo, Pertenencia, Motivacion, Semestre, Año)
-          values (vIdEvaluacion, i.IdEmpleado, vPuntualidad, vRendimiento, vPertenencia, vMotivacion, 'II', vAñoAux);
+          insert into clima_org (IdEvaluacion, IdEmpleado, Comunicacion, Liderazgo, Pertenencia, Motivacion, Semestre, Año)
+          values (vIdEvaluacion, i.IdEmpleado, vComunicacion, vLiderazgo, vPertenencia, vMotivacion, 'II', vAñoAux);
         END IF;  
 
         vAñoAux := vAñoAux + 1;
@@ -113,7 +113,7 @@ BEGIN
    END LOOP;
    commit;
 END;
-
+execute LlenarClimaOrganizacional;
 ---
 --- Procedimiento para llenar telefonos
 ---

@@ -162,13 +162,13 @@ IdSede  varchar2(30) NOT NULL,
   
  
 CREATE TABLE evaluacion_emp(
-IdEvaluacion		int NOT NULL,
+IdEvaluacion		varchar2(30) NOT NULL,
 IdEmpleado 			varchar(30) NOT NULL,
 Puntualidad			int,
 Rendimiento			int,
 Calidad     		int,
 Semestre 			varchar(30) NOT NULL,
-Año 				date,
+Año 				int,
 	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
 	CONSTRAINT fk_IdEmpleado
 		 foreign key (IdEmpleado)

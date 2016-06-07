@@ -145,7 +145,7 @@ CREATE SEQUENCE evaluacionid
 
 Create or Replace procedure LlenarEvaluacionEmpleados
 is
-Declare
+
       vIdEvaluacion varchar2(30);
       vAñoIngreso int;
       vAñoAux int;
@@ -173,7 +173,7 @@ BEGIN
           select trunc(dbms_random.value(50,100)) into  vCalidad     from  dual;
 
           vIdEvaluacion := evaluacionid.nextval;
-          insert into evaluacion_emp (vIdEvaluacion, IdEmpleado, Puntualidad, Rendimiento, Calidad, Semestre, Año)
+          insert into evaluacion_emp (IdEvaluacion, IdEmpleado, Puntualidad, Rendimiento, Calidad, Semestre, Año)
           values (vIdEvaluacion, i.IdEmpleado, vPuntualidad, vRendimiento, vCalidad, 'I', vAñoAux);
 
         END IF;
@@ -184,7 +184,7 @@ BEGIN
           select trunc(dbms_random.value(50,100)) into  vCalidad     from  dual;
 
           vIdEvaluacion := evaluacionid.nextval;
-          insert into evaluacion_emp (vIdEvaluacion, IdEmpleado, Puntualidad, Rendimiento, Calidad, Semestre, Año)
+          insert into evaluacion_emp (IdEvaluacion, IdEmpleado, Puntualidad, Rendimiento, Calidad, Semestre, Año)
           values (vIdEvaluacion, i.IdEmpleado, vPuntualidad, vRendimiento, vCalidad, 'II', vAñoAux);
         END IF;  
 
@@ -213,7 +213,7 @@ CREATE SEQUENCE climaid
 
 Create or Replace procedure LlenarClimaOrganizacional
 is
-Declare
+
       vIdEvaluacion   varchar2(30);
       vAñoIngreso     int;
       vAñoAux         int;
@@ -243,8 +243,8 @@ BEGIN
           select trunc(dbms_random.value( 0,100)) into  vMotivacion   from  dual;
 
           vIdEvaluacion := climaid.nextval;
-          insert into evaluacion_emp (vIdEvaluacion, IdEmpleado, Comunicacion, Liderazgo, Pertenencia, Motivacion, Semestre, Año)
-          values (vIdEvaluacion, i.IdEmpleado, vPuntualidad, vRendimiento, vPertenencia, vMotivacion, 'I', vAñoAux);
+          insert into clima_org (IdEvaluacion, IdEmpleado, Comunicacion, Liderazgo, Pertenencia, Motivacion, Semestre, Año)
+          values (vIdEvaluacion, i.IdEmpleado, vComunicacion, vLiderazgo, vPertenencia, vMotivacion, 'I', vAñoAux);
 
         END IF;
 
@@ -255,8 +255,8 @@ BEGIN
           select trunc(dbms_random.value( 0,100)) into  vMotivacion   from  dual;
 
           vIdEvaluacion := climaid.nextval;
-          insert into evaluacion_emp (vIdEvaluacion, IdEmpleado, Comunicacion, Liderazgo, Pertenencia, Motivacion, Semestre, Año)
-          values (vIdEvaluacion, i.IdEmpleado, vPuntualidad, vRendimiento, vPertenencia, vMotivacion, 'II', vAñoAux);
+          insert into clima_org (IdEvaluacion, IdEmpleado, Comunicacion, Liderazgo, Pertenencia, Motivacion, Semestre, Año)
+          values (vIdEvaluacion, i.IdEmpleado, vComunicacion, vLiderazgo, vPertenencia, vMotivacion, 'II', vAñoAux);
         END IF;  
 
         vAñoAux := vAñoAux + 1;
@@ -267,7 +267,7 @@ BEGIN
    END LOOP;
    commit;
 END;
-
+execute LlenarClimaOrganizacional;
 -- Segun Wikipedia: Clima Organizacional
 -- Es el ambiente generado por las emociones de los miembros de un grupo u organización, el cual está 
 -- relacionado con la motivación de los empleados.
@@ -276,18 +276,18 @@ END;
 -- captura las representaciones psicológicas significativas hechas por los trabajadores referentes 
 -- a la estructura, procesos y eventos que suceden en la organización
 CREATE TABLE clima_org(
-IdEvaluacion		int NOT NULL
-IdEmpleado 			varchar(30) NOT NULL,
-Comunicacion		int,
-Liderazgo		    int,
-Pertenencia			int,
+IdEvaluacion    varchar(30) NOT NULL,
+IdEmpleado      varchar(30) NOT NULL,
+Comunicacion    int,
+Liderazgo       int,
+Pertenencia     int,
 Motivacion      int,
-Semestre 			  varchar(30) NOT NULL),
-Año 				    date;
-	CONSTRAINT pk_IdEvaluacion_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
-	CONSTRAINT fk_IdEmpleado
-		 foreign key (IdEmpleado)
-		 references empleados(IdEmpleado)
+Semestre        varchar(30) NOT NULL,
+Año             int,
+  CONSTRAINT pk_IdClima_IdEmpleado PRIMARY KEY (IdEvaluacion, IdEmpleado),
+  CONSTRAINT fk_IdEmpleadoClima
+     foreign key (IdEmpleado)
+     references empleados(IdEmpleado))
     tablespace rrhh_tbs;
   
   
