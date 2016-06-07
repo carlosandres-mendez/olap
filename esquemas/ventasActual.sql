@@ -276,11 +276,11 @@ Fecha				date,
 MontoAsegurado		decimal(10,2),
 IdVendedor     		varchar2(30),
 IdCliente     		varchar2(30),
-CONSTRAINT pk_polizasins PRIMARY KEY (NumPoliza))--,
---CONSTRAINT fk_tiposeguro_polizas foreign key(IdSeguro) references tiposeguro(IdSeguro),
---CONSTRAINT fk_poliza_vendedor foreign key(IdVendedor) references rrhh.vendedores(IdVendedor),
---CONSTRAINT fk_poliza_cliente foreign key(IdCliente) references clientes(IdCliente))
-tablespace data_tbs;
+CONSTRAINT pk_polizasins PRIMARY KEY (NumPoliza),
+CONSTRAINT fk_tiposeguro_polizas foreign key(IdSeguro) references tiposeguro(IdSeguro),
+CONSTRAINT fk_poliza_vendedor foreign key(IdVendedor) references rrhh.vendedores(IdVendedor),
+CONSTRAINT fk_poliza_cliente foreign key(IdCliente) references clientesINS(IdCliente))
+tablespace ventas_tbs;
 
 ALTER TABLE polizasINS
 drop column idbeneficiario; 
@@ -292,7 +292,7 @@ Declare
       CURSOR c1 is
       SELECT idcliente, idpersona FROM clientesINS where rownum < 5000;  -- por cada cliente haremos varias polizas
       CURSOR c2 is
-      select idseguro, prima
+      select idseguro
       from tiposeguro
       where rownum = trunc(dbms_random.value(1,22));
 BEGIN
@@ -300,10 +300,9 @@ BEGIN
    LOOP
       for j in c2 loop
           vidpoliza := polizaid.nextval;
-          insert into polizasINS (numpoliza, idseguro, idbeneficiario, primatotal, fecha, montoasegurado,idvendedor, idcliente)
+          insert into polizasINS (numpoliza, idseguro, primatotal, fecha, montoasegurado,idvendedor, idcliente)
           values (vidpoliza, -- numpoliza de secuencia 
                   j.idseguro,     -- idseguro de tiposeguro
-                  null,     -- idbenef de beneficiario ASIGNADO DESPUES RANDOM 
                   null,     -- primatotal calculada de prima sacada de tipo seguro y se calcula segun monto asegurado.  (osea dejar esta para el final)
                   null,     -- fecha inventada
                   null,     -- montoasegurado random 
@@ -375,7 +374,7 @@ BEGIN
    END LOOP;
 END;
 
--- incluyendo beneficiarios 
+-- incluyendo beneficiarios ?
 select * from polizasINS;
 select * from coberturasINS;
 Declare
