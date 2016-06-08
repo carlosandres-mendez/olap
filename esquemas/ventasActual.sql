@@ -114,7 +114,7 @@ IdPerFisica       varchar2(30) NOT NULL,
 RelacionConCliente  varchar2(30),
 NumPoliza         varchar2(30) NOT NULL,   
 CONSTRAINT pk_beneficiariosins PRIMARY KEY (IdBeneficiario),
-CONSTRAINT fk_perfisica_beneficiariosins foreign key(IdBeneficiario) references rrhh.personasfisicas(IdPerFisica),
+CONSTRAINT fk_perfisica_beneficiariosins foreign key(IdPerFisica) references rrhh.personasfisicas(IdPerFisica),
 CONSTRAINT fk_numpoliza_beneficiariosins foreign key (numPoliza) references ventas.polizasINS(numPoliza))
 tablespace ventas_tbs;
 
@@ -405,7 +405,7 @@ END;
 ---
 --- Procedimiento para llenar Proveedores
 ---
-select * from proveedoresins;
+/* select * from proveedoresins;
 Create or Replace procedure LlenarProveedores
 is
   CURSOR c1 is
@@ -424,4 +424,4 @@ BEGIN
 END;
 
 execute LlenarProveedores;
-
+*/

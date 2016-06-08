@@ -468,7 +468,7 @@ insert into nivelAcademico values('Master');
 insert into nivelAcademico values('Doctor');
 
 
-Create or Replace procedure LlenarProfesiones_NivelAcademico
+Create or Replace procedure LlenarProf_Na
 is
   CURSOR c1 is
       SELECT Idcliente
@@ -493,7 +493,7 @@ BEGIN
   end loop; 
 END;
 
-execute LlenarProfesiones_NivelAcademico;
+execute LlenarProf_Na;
 
 select * from nivelAcademico;
 select * from profesiones;
