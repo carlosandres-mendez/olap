@@ -295,3 +295,105 @@ FOR i in 1..50 -- por el momento vamos a tener 50 proveedores
   END LOOP;
 END;
 
+
+-------- inserciones de Armando
+
+-- insertar supervisor en empleado  
+begin
+  for i in 9..206 
+  loop    
+      update empleados set supervisor=(select round(dbms_random.value(8,28)) from dual) where idempleado = i;
+  end loop;
+end;
+
+
+-- insertar departamento en empleado 
+
+select * from DEPARTAMENTOS
+begin
+  for i in 8..206 
+  loop    
+      update empleados set IDDEPARTAMENTO=(select TO_CHAR(round(dbms_random.value(1,8))) from dual) where idempleado = i;
+  end loop;
+end;
+
+-- insertar en dep_sedes
+delete departamentos_sede
+select * from DEPARTAMENTOS_sede
+
+begin
+  for i in 1..8 
+  loop
+    for j in 1..10
+    loop
+      insert into departamentos_sede (iddep, idsede) values(i,(select TO_CHAR(round(dbms_random.value(1,39))) from dual));
+    end loop;
+  end loop;
+end;
+
+begin
+for j in 1..10
+loop
+  insert into departamentos_sede (iddep, idsede) values((select TO_CHAR(round(dbms_random.value(1,8))) from dual),(select TO_CHAR(round(dbms_random.value(1,39))) from dual));
+end loop;
+end;
+
+--insertar los atributos que faltan en sedes
+
+select * from sedes
+
+--cargar direccion
+begin
+  for i in 1..39 
+  loop    
+      update sedes set direccion=(SELECT DBMS_RANDOM.string('U', 1) FROM dual) where idsede = i;
+  end loop;
+end;
+
+update sedes set direccion='Descripción'
+
+--cargar telefono
+begin
+  for i in 1..39 
+  loop    
+      update sedes set telefono=('2'||(select TO_CHAR(round(dbms_random.value(1000000,9999999))) from dual)) where idsede = i;
+  end loop;
+end;
+
+--cargar email
+begin
+  for i in 1..39 
+  loop    
+      update sedes set email=('sede'||to_char(i)||'@ins.co.cr') where idsede = i;
+  end loop;
+end;
+
+--cargar pagina web
+begin
+  for i in 1..39 
+  loop    
+      update sedes set pagweb=('www.sede'||to_char(i)||'.ins.co.cr') where idsede = i;
+  end loop;
+end;
+
+--cargar apartado
+begin
+  for i in 1..39 
+  loop    
+      update sedes set apartado=((select TO_CHAR(round(dbms_random.value(1,7))) from dual)||'0'||(select TO_CHAR(round(dbms_random.value(1,9))) from dual)||'0'||(select TO_CHAR(round(dbms_random.value(1,9))) from dual)) where idsede = i;
+  end loop;
+end;
+
+--cargar licencia
+begin
+  for i in 1..39 
+  loop    
+      update sedes set licencia=(SELECT DBMS_RANDOM.string('U', 1) FROM dual) where idsede = i;
+  end loop;
+end;
+
+
+
+
+
+
